@@ -51,8 +51,10 @@ prepare() {
 }
 
 run_test_application() {
-  run_args=${CONTAINER_ARGS:-}
-  docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+  # TODO: Reenable run_args and revert --user to --user=100001
+  # We need to run as root as travis does not have SeLinux on their host machines
+  # run_args=${CONTAINER_ARGS:-}
+  docker run --user root ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
 cleanup_test_app() {
