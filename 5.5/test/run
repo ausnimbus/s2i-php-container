@@ -7,6 +7,7 @@
 # The image has to be available before this script is executed.
 #
 IMAGE_NAME=${IMAGE_NAME-openshift/php-55-centos-candidate}
+S2I_ARGS=${S2I_ARGS:-""}
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -32,7 +33,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  s2i build ${s2i_args} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  s2i build ${S2I_ARGS} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
 }
 
 prepare() {
@@ -100,7 +101,7 @@ wait_for_cid() {
 
 test_s2i_usage() {
   info "Testing 's2i usage'"
-  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
+  s2i usage ${S2I_ARGS} ${IMAGE_NAME} &>/dev/null
 }
 
 test_docker_run_usage() {
@@ -168,10 +169,6 @@ test_application() {
 }
 
 cid_file=$(mktemp -u --suffix=.cid)
-
-# Since we built the candidate image locally, we don't want S2I attempt to pull
-# it from Docker hub
-s2i_args="--force-pull=false"
 
 prepare
 run_s2i_build
