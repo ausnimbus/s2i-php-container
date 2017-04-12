@@ -16,7 +16,7 @@ docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" quay.io
 
 for i in */
 do
-  if [[ ${i%*/} != 'test' ]]; then
+  if [[ ${i%*/} != 'test' && ${i%*/} != '5.5' ]]; then
 
     version=${i%*/}
     image=quay.io/$TRAVIS_REPO_SLUG:$version
